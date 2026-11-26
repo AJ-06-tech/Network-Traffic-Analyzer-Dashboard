@@ -8,6 +8,8 @@ An interactive web-based network traffic monitoring, protocol classification, an
 
 While packet sniffers such as Wireshark capture raw network frames in detail, interpreting traffic trends, bandwidth consumers, and suspicious port activity requires manual filtering and protocol expertise. **Network Traffic Analyzer Dashboard** bridges this gap by combining packet capture (`.pcap` file ingestion or live interface sniffing via Scapy) with automated Pandas aggregation, reverse-DNS enrichment, rule-based anomaly detection, and interactive Plotly visualizations inside a dark-themed Streamlit dashboard.
 
+*(Artifact Attribution: `CCN_project report .pdf` and all system architecture and dashboard screenshots are original artifacts from the academic submission. The Python scripts `app.py`, `packet_analyzer.py`, `generate_sample_pcap.py`, and `sample_traffic.pcap` are reconstructed implementations built directly from the architecture and metrics documented in the report.)*
+
 ---
 
 ## 2. Objectives
@@ -34,7 +36,7 @@ While packet sniffers such as Wireshark capture raw network frames in detail, in
 
 ## 4. System Architecture (9-Stage Pipeline)
 
-![System Architecture](./images/System_Architecture.png)
+![System Architecture](./System_Architecture.png)
 
 1. **Traffic Capture:** Intercept packets from the active network interface via Wireshark or Scapy and store/read them in `.pcap` format.
 2. **Packet Processing:** Dissect Ethernet/IPv4/TCP/UDP/ICMP headers to identify protocols and session endpoints.
@@ -53,37 +55,37 @@ While packet sniffers such as Wireshark capture raw network frames in detail, in
 ### 5.1 Protocol Distribution
 Displays packet counts and percentage shares across detected protocols. In the report's benchmark capture (118 packets), encrypted **TLS** accounted for **66.9%** (79 packets), followed by **DNS** at **16.1%** (19 packets), **HTTP** at **8.47%** (10 packets), **OTHER** at **5.93%** (7 packets), and **UDP** at **2.54%** (3 packets).
 
-![Protocol Distribution](./images/Protocol_Distribution.png)
+![Protocol Distribution](./Protocol_Distribution.png)
 
 ### 5.2 Top Active Source IPs & Bandwidth-Consuming Websites
 Ranks the most active IP endpoints by packet count and aggregates total bytes transferred by resolved domain/device category (`Local Device` at `192.168.29.180`, external endpoints such as `amazonaws.com` and `googleusercontent.com`, and multicast `mcast.net`).
 
 | Top Active Source IPs | Top Bandwidth Consuming Websites |
 | :---: | :---: |
-| ![Top Active Source IPs](./images/Top_Active_IPs.png) | ![Top Bandwidth Consuming Websites](./images/Top_Bandwidth_Websites.png) |
+| ![Top Active Source IPs](./Top_Active_IPs.png) | ![Top Bandwidth Consuming Websites](./Top_Bandwidth_Websites.png) |
 
-![Website Bandwidth Table](./images/Website_Bandwidth_Table.png)
+![Website Bandwidth Table](./Website_Bandwidth_Table.png)
 
 ### 5.3 Port Analysis
 Identifies the most frequently accessed TCP/UDP port numbers, distinguishing well-known system ports (`0–1000`, such as ports `80`, `443`, and `53`) from high-numbered dynamic/ephemeral client ports (`52000`, `55000`, `59000`).
 
-![Port Analysis](./images/Port_Analysis.png)
+![Port Analysis](./Port_Analysis.png)
 
 ### 5.4 Packet Size Analysis & Traffic Timeline
 Tracks packet payload/frame sizes (up to the `1514`-byte Ethernet MTU) across packet sequence numbers, highlighting burst transmissions versus smaller control/DNS exchanges.
 
 | Packet Size Variation Over Time | Network Traffic Timeline |
 | :---: | :---: |
-| ![Packet Size Analysis](./images/Packet_Size_Analysis.png) | ![Traffic Timeline](./images/Traffic_Timeline.png) |
+| ![Packet Size Analysis](./Packet_Size_Analysis.png) | ![Traffic Timeline](./Traffic_Timeline.png) |
 
 ### 5.5 Network Anomaly Detection, Smart Alerts & Packet Inspection
 Evaluates traffic against rule-based thresholds to display clear anomaly status banners (`No network anomaly detected.`) alongside informational alerts (`Large amount of encrypted TLS traffic detected.`), followed by an interactive protocol filter and full packet-level inspection table.
 
 | Anomaly Detection & Smart Alerts | Protocol Filter (`UDP`) |
 | :---: | :---: |
-| ![Anomaly Detection Alerts](./images/Anomaly_Detection_Alerts.png) | ![Protocol Filter](./images/Protocol_Filter.png) |
+| ![Anomaly Detection Alerts](./Anomaly_Detection_Alerts.png) | ![Protocol Filter](./Protocol_Filter.png) |
 
-![Captured Packet Data](./images/Captured_Packet_Data.png)
+![Captured Packet Data](./Captured_Packet_Data.png)
 
 ---
 
@@ -91,22 +93,21 @@ Evaluates traffic against rule-based thresholds to display clear anomaly status 
 
 ```text
 Network-Traffic-Analyzer-Dashboard/
-├── app.py                        # Streamlit web application & Plotly visualizations (reconstructed)
-├── packet_analyzer.py            # Scapy PCAP/live packet parser, DNS resolver & anomaly detector (reconstructed)
-├── generate_sample_pcap.py       # Utility script to generate sample_traffic.pcap (reconstructed)
-├── sample_traffic.pcap           # 118-packet sample capture matching report statistics (reconstructed)
-├── requirements.txt              # Python package dependencies
-├── CCN_project_report.pdf        # Original academic project report
-├── README.md                     # Project documentation
-└── images/                       # Original architecture diagram & dashboard screenshots from report
-    ├── System_Architecture.png
-    ├── Protocol_Distribution.png
-    ├── Top_Active_IPs.png
-    ├── Top_Bandwidth_Websites.png
-    ├── Website_Bandwidth_Table.png
-    ├── Port_Analysis.png
-    ├── Packet_Size_Analysis.png
-    ├── Traffic_Timeline.png
-    ├── Anomaly_Detection_Alerts.png
-    ├── Protocol_Filter.png
-    └── Captured_Packet_Data.png
+├── app.py                           # Streamlit web application & Plotly visualizations (reconstructed)
+├── packet_analyzer.py               # Scapy PCAP/live packet parser, DNS resolver & anomaly detector (reconstructed)
+├── generate_sample_pcap.py          # Utility script to generate sample_traffic.pcap (reconstructed)
+├── sample_traffic.pcap              # 118-packet sample capture matching report statistics (reconstructed)
+├── requirements.txt                 # Python package dependencies
+├── CCN_project report .pdf          # Original academic project report
+├── README.md                        # Project documentation
+├── System_Architecture.png          # Original 9-stage architecture diagram
+├── Protocol_Distribution.png        # Original dashboard screenshot
+├── Top_Active_IPs.png               # Original dashboard screenshot
+├── Top_Bandwidth_Websites.png       # Original dashboard screenshot
+├── Website_Bandwidth_Table.png      # Original dashboard screenshot
+├── Port_Analysis.png                # Original dashboard screenshot
+├── Packet_Size_Analysis.png         # Original dashboard screenshot
+├── Traffic_Timeline.png             # Original dashboard screenshot
+├── Anomaly_Detection_Alerts.png     # Original dashboard screenshot
+├── Protocol_Filter.png              # Original dashboard screenshot
+└── Captured_Packet_Data.png         # Original dashboard screenshot
